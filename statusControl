@@ -16,7 +16,7 @@ doIt = 1
 def submitConfig(config):
 	global doIt
 	# print "CONFIG :: ", config
-	r=requests.post("https://status.ziemba.net/SET/",data=config)
+	r=requests.post("https://status.ziemba.net/SET",data=config)
 	# print r.url
 	# print r.text
 	doIt = 1
