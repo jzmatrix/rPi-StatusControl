@@ -1,0 +1,42 @@
+#!/usr/bin/env python
+from time import sleep
+import requests
+import RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
+################################################################################
+GPIO.setwarnings(True) # Ignore warning for now
+GPIO.setmode(GPIO.BOARD) # Use physical pin numbering
+GPIO.setup(8, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) # Set pin to be an input pin and set initial value to be pulled low (off)
+GPIO.setup(10, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) # Set pin to be an input pin and set initial value to be pulled low (off)
+GPIO.setup(12, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) # Set pin to be an input pin and set initial value to be pulled low (off)
+GPIO.setup(11, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) # Set pin to be an input pin and set initial value to be pulled low (off)
+GPIO.setup(13, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) # Set pin to be an input pin and set initial value to be pulled low (off)
+################################################################################
+doIt = 1
+################################################################################
+def submitConfig(config):
+	global doIt
+	# print "CONFIG :: ", config
+	r=requests.post("https://status.ziemba.net/SET/",data=config)
+	# print r.url
+	# print r.text
+	doIt = 1
+	sleep(.5)
+################################################################################
+while True:
+	if GPIO.input(8) == GPIO.HIGH and doIt:
+		doIt = 0
+		submitConfig({'newColor':'0,0,0,0'})
+	if GPIO.input(10) == GPIO.HIGH and doIt:
+		doIt = 0
+		# submitConfig({'newColor':'255,0,0,1','bright':'50'})
+		submitConfig({'newColor':'redcross','bright':'50'})
+	if GPIO.input(12) == GPIO.HIGH and doIt:
+		doIt = 0
+		submitConfig({'newColor':'0,255,0,0','bright':'50'})
+	if GPIO.input(11) == GPIO.HIGH and doIt:
+		doIt = 0
+		submitConfig({'special':'rainbow','bright':'50'})
+	if GPIO.input(13) == GPIO.HIGH and doIt:
+		doIt = 0
+		submitConfig({'newColor':'0,0,255,0','bright':'50'})
+	sleep(.1)

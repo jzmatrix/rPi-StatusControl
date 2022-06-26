@@ -1,0 +1,13 @@
+#!/usr/bin/perl
+################################################################################
+my $myPid = $$;
+my $curPid = `/bin/pidof -x python`; chomp $curPid;
+if ($curPid)
+{
+  print "Already Running\n";
+  exit;
+}
+else
+{
+  `/opt/statusControl/statusControl`;
+}
